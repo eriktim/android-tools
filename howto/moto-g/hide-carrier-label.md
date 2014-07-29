@@ -1,21 +1,19 @@
 # Hide carrier label
 
-*debian* | *motorola moto g* | *4.4.2 kitkat*
+*debian* | *motorola moto g* | *4.4.4 kitkat*
 
 Firstly, pull `SystemUI.apk` and the device-specific framework from your device.
 
-    $ adb shell
-    $ cp /system/priv-app/SystemUI.apk /sdcard/
-    $ cp /system/framework/framework-res.apk /sdcard/
-    $ exit
+    $ adb shell cp /system/priv-app/SystemUI.apk /sdcard/
+    $ adb shell cp /system/framework/framework-res.apk /sdcard/
     $ adb pull /sdcard/SystemUI.apk .
     $ adb pull /sdcard/framework-res.apk .
 
 Next, download `apktool_2.0.0b8.jar` from \[1\], set the correct framework and decompile\[2\] `SystemUI.apk`.
 
-    $ wget http://miui.connortumbleson.com/other/apktool/test_versions/apktool_2.0.0b8.jar
-    $ java -jar apktool_2.0.0b8.jar if framework-res.apk
-    $ java -jar apktool_2.0.0b8.jar d SystemUI.apk
+    $ wget http://connortumbleson.com/apktool/test_versions/apktool_2.0.0b9.jar
+    $ java -jar apktool_2.0.0b9.jar if framework-res.apk
+    $ java -jar apktool_2.0.0b9.jar d SystemUI.apk
 
 Now modify the package\[3\]: search for `onsText` and update the `TextView`'s appropriate attribute to `android:maxLength="0"`.
 
@@ -23,7 +21,7 @@ Now modify the package\[3\]: search for `onsText` and update the `TextView`'s ap
 
 Recompile the modified version while preserving the signature (using `-c`), which will allow you to replace the APK later on.
 
-    $ java -jar apktool_2.0.0b8.jar b SystemUI -c
+    $ java -jar apktool_2.0.0b9.jar b SystemUI -c
 
 Finally, push the modified `SystemUI.apk` to the device and install it.
 
@@ -34,6 +32,7 @@ Finally, push the modified `SystemUI.apk` to the device and install it.
     # cp /system/priv-app/SystemUI.apk /system/priv-app/SystemUI.apk.BAK
     # cp /system/priv-app/SystemUI.odex /system/priv-app/SystemUI.odex.BAK
     # cp /sdcard/SystemUI.apk /system/priv-app/SystemUI.apk
+    # rm /system/priv-app/SystemUI.odex
     # chmod 644 /system/priv-app/SystemUI.apk
     # mount -o remount,ro /system
     # reboot
