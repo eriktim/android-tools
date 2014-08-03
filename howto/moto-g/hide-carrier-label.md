@@ -17,7 +17,7 @@ Next, download `apktool_2.0.0b8.jar` from \[1\], set the correct framework and d
 
 Now modify the package\[3\]: search for `onsText` and update the `TextView`'s appropriate attribute to `android:maxLength="0"`.
 
-    $ vim SystemUI/res/layout/status_bar.xml
+    $ sed -i '/onsText/ s/maxLength="\([0-9]\+\)"/maxLength="0"/' SystemUI/res/layout/status_bar.xml
 
 Recompile the modified version while preserving the signature (using `-c`), which will allow you to replace the APK later on.
 
