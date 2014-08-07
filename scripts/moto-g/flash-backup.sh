@@ -121,13 +121,16 @@ do
     sleep 3
 done
 
+echo ""
 echo "Flashing bootlogo..."
 
 fastboot flash logo logo-custom.bin > /dev/null 2>&1
 
+echo ""
 echo "Reboot..."
 
 fastboot reboot > /dev/null 2>&1
 
+echo ""
 echo "All done!"
 
