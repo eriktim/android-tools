@@ -21,16 +21,13 @@ ADB_ARGS="-s $ADB_DEVICE"
 ADB="$ADB_BIN $ADB_ARGS"
 
 ANDROID_VERSION=$($ADB shell getprop ro.build.version.release)
-IFS_BAK=$IFS
-export IFS="."
-for V in $ANDROID_VERSION; do
+for V in $(echo "$ANDROID_VERSION" | sed 's/\./\n/g'); do
   if [ $V -lt 4 ]; then
     echo "Your device must run Android 4.0.4+"
     exit 1
   fi
   break
 done
-export IFS=$IFS_BAK
 
 echo "Using device '$ADB_DEVICE'"
 
