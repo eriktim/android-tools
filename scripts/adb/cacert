@@ -5,6 +5,8 @@
 # Version 1.0 - 2013/07/31
 # Usage: ./cacert.sh [<serial-number>]
 
+set -e
+
 ADB_BIN="adb"
 if [ $# -le 1 ]; then
   ADB_DEVICE=$($ADB_BIN devices | head -n2 | tail -n1 | awk '{print $1}')
@@ -36,33 +38,6 @@ TEST_CMD=$($ADB shell "echo -n 'testing'")
 if [ "$TEST_CMD" != "testing" ]; then
   echo "Failed connecting to '$ADB_DEVICE'"
   exit 1
-fi
-
-ADB_ROOT_TEST=$($ADB shell 'getprop service.adb.root')
-
-if [ "$ADB_ROOT_TEST" -ne "$ADB_ROOT_TEST" ]; then
-  ADB_ROOT_TEST="0"
-fi
-
-if [ "$ADB_ROOT_TEST" -ne 1 ]; then
-  echo "Restarting adb as root, wait for 3 seconds..."
-  $ADB root > /dev/null
-  sleep 3
-
-  ADB_ROOT_TEST=$($ADB shell 'getprop service.adb.root')
-
-  if [ "$ADB_ROOT_TEST" -ne "$ADB_ROOT_TEST" ]; then
-    ADB_ROOT_TEST="0"
-  fi
-  
-  if [ "$ADB_ROOT_TEST" -ne 1 ]; then
-    echo "Root access not granted. Please verify that:"
-    echo "* your device is rooted"
-    echo "* adb is running again"
-    echo "* your device accepted the fingerprint of your computer"
-    echo "* adb root access is enabled in the developer options"
-    exit 1
-  fi
 fi
 
 CERT_ROOT="root.crt"
@@ -97,12 +72,12 @@ if [ -f "$CERT_ROOT" ] && [ -f "$CERT_CLASS3" ]; then
     $ADB push $CERT_CLASS3 $REMOTE_DIR
 
     echo "Add certificates to system files"
-    $ADB remount -o rw,remount /system > /dev/null
-    $ADB shell 'cp '$REMOTE_DIR$CERT_ROOT' /etc/security/cacerts/'
-    $ADB shell 'cp '$REMOTE_DIR$CERT_CLASS3' /etc/security/cacerts/'
-    $ADB shell 'chmod 644 /etc/security/cacerts/'$CERT_ROOT
-    $ADB shell 'chmod 644 /etc/security/cacerts/'$CERT_CLASS3
-    $ADB remount -o ro,remount /system > /dev/null
+    $ADB shell su -c 'mount -o rw,remount /system > /dev/null'
+    $ADB shell su -c 'cp '$REMOTE_DIR$CERT_ROOT' /etc/security/cacerts/'
+    $ADB shell su -c 'cp '$REMOTE_DIR$CERT_CLASS3' /etc/security/cacerts/'
+    $ADB shell su -c 'chmod 644 /etc/security/cacerts/'$CERT_ROOT
+    $ADB shell su -c 'chmod 644 /etc/security/cacerts/'$CERT_CLASS3
+    $ADB shell su -c 'mount -o ro,remount /system > /dev/null'
     $ADB shell 'rm '$REMOTE_DIR$CERT_ROOT
     $ADB shell 'rm '$REMOTE_DIR$CERT_CLASS3
 
@@ -114,8 +89,4 @@ if [ -f "$CERT_ROOT" ] && [ -f "$CERT_CLASS3" ]; then
 else
   echo "Failed downloading CAcert certificates"
 fi
-
-echo "Restarting adb as user"
-$ADB shell 'setprop service.adb.root 0'
-$ADB shell 'restart adbd'
 
