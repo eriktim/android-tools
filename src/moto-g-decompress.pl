@@ -1,8 +1,8 @@
 # original script by carock
 # @see http://forum.xda-developers.com/showpost.php?p=48891456&postcount=140
 #
-# modified by server-s
-# @see https://github.com/server-s
+# modified by gingerik
+# @see https://github.com/gingerik
 
 use strict;
 use warnings;

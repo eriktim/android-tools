@@ -8,12 +8,12 @@ if [ $W -ne 720 ] || [ $H -ne 1280 ]; then
 fi
 convert -depth 8 $1 bgr:logo_boot.raw
 cp logo.bin log-custom.bin
-perl src/moto-g-compress.pl logo_boot.raw
+perl ../../src/moto-g-compress.pl logo_boot.raw
 rm logo_boot.raw
 LEN=`stat -c '%s' logo_boot.bin`
-if [ "$((LEN+12))" -gt 467109 ]; then
-  echo "Compressed image is too large"
-  rm  logo-custom.bin
+if [ "$((LEN+12))" -gt 459169 ]; then
+  echo "Compressed image is too large: $((LEN+12))/459169"
+  rm logo-custom.bin
   exit
 fi
 dd if=logo_boot.bin conv=notrunc seek=524 bs=1 count=$LEN of=logo-custom.bin

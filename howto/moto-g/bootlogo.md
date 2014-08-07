@@ -9,11 +9,11 @@ Extract `logo.bin` from the device.
 
 View the images wrapped in `logo.bin`
 
-    $ ./moto-g-extract-bootlogo.sh
+    $ ./extract-bootlogo.sh
 
 Create a custom logo `logo.png` and insert it into a copy of `logo.bin`.
 
-    $ ./moto-g-insert-bootlogo.sh logo.png
+    $ ./insert-bootlogo.sh logo.png
 
 Boot device into fastmode mode.
 
