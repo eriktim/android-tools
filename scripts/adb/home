@@ -1,0 +1,3 @@
+#!/bin/sh
+
+adb shell am start -c android.intent.category.HOME -a android.intent.action.MAIN

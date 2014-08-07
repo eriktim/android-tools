@@ -1,0 +1,3 @@
+#!/bin/sh
+
+adb shell am start -n com.android.settings/.Settings
