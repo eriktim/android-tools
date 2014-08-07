@@ -109,15 +109,14 @@ echo ""
 
 sleep 60
 
-echo "Reboot to bootloader:"
+echo "Reboot to bootloader"
+echo "Waiting for YOU to reboot to bootloader:"
 echo "  * Power Options"
 echo "  * Reboot to Bootloader"
-echo ""
-echo "Waiting for YOU to reboot to bootloader..."
 
 sleep 3
 
-while [ -z $(fastboot devices) ]
+while [ -z "$(fastboot devices)" ]
 do
     sleep 3
 done

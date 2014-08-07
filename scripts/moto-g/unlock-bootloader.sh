@@ -54,8 +54,7 @@ if [ -z "$fastbootCheck" ]; then
 	exit 1
 fi
 
-echo -n "Ignore the 'FAILED' message that will follow..."
-echo -n "And let your device reboot fully"
+echo "Wait for your device to fully reboot"
 echo ""
 
-fastboot oem unlock ${unlockCode}
+fastboot oem unlock ${unlockCode} > /dev/null 2>&1
