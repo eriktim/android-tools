@@ -1,6 +1,6 @@
 #!/bin/sh
 
-fastbootCheck=`fastboot devices`
+fastbootCheck=$(fastboot devices)
 
 if [ -z "$fastbootCheck" ]; then
 	echo "Put your device in fastboot mode (i.e. power off, and then"
@@ -8,12 +8,12 @@ if [ -z "$fastbootCheck" ]; then
 	exit 1
 fi
 
-unlockData=`fastboot oem get_unlock_data 2>&1`
-unlockKey=`echo ${unlockData} | sed "s/ (bootloader) //g" | sed "s/\.//g" | grep -o "^\S*"`
+unlockData=$(fastboot oem get_unlock_data 2>&1)
+unlockKey=$(echo ${unlockData} | sed "s/ (bootloader) //g" | sed "s/\.//g" | grep -o "^\S*")
 
-phoneSN=`echo ${unlockKey} | awk -F'#' '{print $1}'`
-phonePUID=`echo ${unlockKey} | awk -F'#' '{print $4}'`
-phoneHash=`echo ${unlockKey} | awk -F'#' '{print $3}'`
+phoneSN=$(echo ${unlockKey} | awk -F'#' '{print $1}')
+phonePUID=$(echo ${unlockKey} | awk -F'#' '{print $4}')
+phoneHash=$(echo ${unlockKey} | awk -F'#' '{print $3}')
 
 url="https://motorola-global-portal.custhelp.com/cc/productRegistration/unlockPhone/$phoneSN/$phonePUID/$phoneHash/"
 
@@ -47,7 +47,7 @@ if [ "$confirm" != "y" ]; then
 	exit 1
 fi
 
-fastbootCheck=`fastboot devices`
+fastbootCheck=$(fastboot devices)
 
 if [ -z "$fastbootCheck" ]; then
 	echo "Your device is not in fastboot mode"
