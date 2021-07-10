@@ -38,7 +38,7 @@ echo "About to run"
 echo ""
 echo "  $ fastboot oem unlock $unlockCode"
 echo ""
-echo -n "Do you wish to continue? (y/n) "
+echo -n "Do you wish to continue? (y) "
 read confirm
 echo ""
 
